@@ -47,7 +47,7 @@ public class RevealingListView extends PullToRefreshListView {
         setOnPullEventListener(mRevealEventListener);
         mState = ContentState.VISIBLE;
     }
-
+    
     private OnPullEventListener<ListView> mRevealEventListener = new OnPullEventListener<ListView>() {
         @Override
         public void onPullEvent(PullToRefreshBase<ListView> listView, State state, Mode direction) {
@@ -55,13 +55,16 @@ public class RevealingListView extends PullToRefreshListView {
                 case RELEASE_TO_REFRESH:
                     hideList();
                     break;
+                case RESET:
+                    mHideListener.onListReset();
+                    break;
             }
         }
     };
 
     /** Dismiss the list on header tap. */
     public void hideList() {
-        mAnimation = ObjectAnimator.ofFloat(this, "y", getY(), getHeight() - 50f);
+        mAnimation = ObjectAnimator.ofFloat(this, "y", getY(), getHeight());
         mAnimation.setDuration(700);
         mAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         mAnimation.start();
@@ -70,6 +73,7 @@ public class RevealingListView extends PullToRefreshListView {
     
     /** Show the list on button tap. */ 
     public void showList() {
+        onReset();
         mAnimation.reverse();
     }
     
@@ -88,6 +92,7 @@ public class RevealingListView extends PullToRefreshListView {
                     mState = ContentState.GONE;
                     break;
                 case GONE:
+                    mHideListener.onListShow();
                     mState = ContentState.VISIBLE;
                     break;
             }
@@ -104,13 +109,15 @@ public class RevealingListView extends PullToRefreshListView {
         }
     };
     
-    public interface ListHideListener {
+    public interface ListActionListener {
         public void onListHide();
+        public void onListShow();
+        public void onListReset();
     }
     
-    private ListHideListener mHideListener;
+    private ListActionListener mHideListener;
     
-    public void setOnListHideListener(ListHideListener listener) {
+    public void setOnListHideListener(ListActionListener listener) {
         mHideListener = listener;
     }
 }
