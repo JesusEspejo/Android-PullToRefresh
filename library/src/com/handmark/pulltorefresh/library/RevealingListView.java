@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ListView;
 
@@ -40,36 +39,16 @@ public class RevealingListView extends PullToRefreshListView {
         setOnPullEventListener(mRevealEventListener);
     }
 
-    @Override
-    public void onReset() {
-    }
-
     private OnPullEventListener<ListView> mRevealEventListener = new OnPullEventListener<ListView>() {
-
-        private State mLastState;
 
         @Override
         public void onPullEvent(PullToRefreshBase<ListView> listView, State state, Mode direction) {
-            Log.d(TAG, "State: " + state);
             
             switch(state) {
-                case PULL_TO_REFRESH:
-                    if (State.RELEASE_TO_REFRESH == mLastState) {
-                        hideList();
-                    } else {
-                        Log.d(TAG, State.RELEASE_TO_REFRESH + ", not: " + state);
-                    }
-                    break;
-
                 case RELEASE_TO_REFRESH:
                     hideList();
                     break;
-                case RESET:
-                    
-                    break;
             }
-
-            mLastState = state;
         }
     };
 
@@ -83,7 +62,6 @@ public class RevealingListView extends PullToRefreshListView {
 
     /** Show the list on button tap. */ 
     public void showList() {
-        super.onReset();
         mAnimation.reverse();
     }
 }
