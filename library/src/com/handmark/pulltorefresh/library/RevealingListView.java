@@ -81,7 +81,8 @@ public class RevealingListView extends PullToRefreshListView {
 
         @Override
         public void onAnimationStart(Animator animation) {
-            mHideListener.onListHide();
+            // This line is causing problems
+//            mHideListener.onListHide();
         }
 
         @Override
