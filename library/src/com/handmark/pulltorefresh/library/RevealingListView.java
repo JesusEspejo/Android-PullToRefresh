@@ -62,6 +62,7 @@ public class RevealingListView extends PullToRefreshListView {
                     break;
 
                 case RELEASE_TO_REFRESH:
+                    hideList();
                     break;
                 case RESET:
                     
