@@ -17,28 +17,35 @@ public class RevealingListView extends PullToRefreshListView {
     static final String TAG = "RevealingListView";
 
     private ValueAnimator mAnimation;
-
+    private ContentState mState;
+    
+    private enum ContentState {
+        VISIBLE,
+        GONE
+    }
+    
     public RevealingListView(Context context) {
         super(context);
     }
 
     public RevealingListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        addPullEventListener();
+        init();
     }
 
     public RevealingListView(Context context, Mode mode) {
         super(context, mode);
-        addPullEventListener();
+        init();
     }
 
     public RevealingListView(Context context, Mode mode, AnimationStyle style) {
         super(context, mode, style);
-        addPullEventListener();
+        init();
     }
 
-    private void addPullEventListener() {
+    private void init() {
         setOnPullEventListener(mRevealEventListener);
+        mState = ContentState.VISIBLE;
     }
 
     private OnPullEventListener<ListView> mRevealEventListener = new OnPullEventListener<ListView>() {
@@ -75,7 +82,15 @@ public class RevealingListView extends PullToRefreshListView {
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            mHideListener.onListHide();
+            switch(mState) {
+                case VISIBLE:
+                    mHideListener.onListHide();
+                    mState = ContentState.GONE;
+                    break;
+                case GONE:
+                    mState = ContentState.VISIBLE;
+                    break;
+            }
         }
 
         @Override
