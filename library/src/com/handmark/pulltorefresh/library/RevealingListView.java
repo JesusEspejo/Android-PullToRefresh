@@ -1,3 +1,4 @@
+
 package com.handmark.pulltorefresh.library;
 
 import android.content.Context;
@@ -18,12 +19,11 @@ public class RevealingListView extends PullToRefreshListView {
 
     private ValueAnimator mAnimation;
     private ContentState mState;
-    
+
     private enum ContentState {
-        VISIBLE,
-        GONE
+        VISIBLE, GONE
     }
-    
+
     public RevealingListView(Context context) {
         super(context);
     }
@@ -47,11 +47,11 @@ public class RevealingListView extends PullToRefreshListView {
         setOnPullEventListener(mRevealEventListener);
         mState = ContentState.VISIBLE;
     }
-    
+
     private OnPullEventListener<ListView> mRevealEventListener = new OnPullEventListener<ListView>() {
         @Override
         public void onPullEvent(PullToRefreshBase<ListView> listView, State state, Mode direction) {
-            switch(state) {
+            switch (state) {
                 case RELEASE_TO_REFRESH:
                     hideList();
                     break;
@@ -70,23 +70,23 @@ public class RevealingListView extends PullToRefreshListView {
         mAnimation.start();
         mAnimation.addListener(mAnimationListener);
     }
-    
-    /** Show the list on button tap. */ 
+
+    /** Show the list on button tap. */
     public void showList() {
         onReset();
         mAnimation.reverse();
     }
-    
+
     private ValueAnimator.AnimatorListener mAnimationListener = new ValueAnimator.AnimatorListener() {
 
         @Override
         public void onAnimationStart(Animator animation) {
-            
+            mHideListener.onListHide();
         }
 
         @Override
         public void onAnimationEnd(Animator animation) {
-            switch(mState) {
+            switch (mState) {
                 case VISIBLE:
                     mHideListener.onListHide();
                     mState = ContentState.GONE;
@@ -100,23 +100,23 @@ public class RevealingListView extends PullToRefreshListView {
 
         @Override
         public void onAnimationCancel(Animator animation) {
-            
+
         }
 
         @Override
         public void onAnimationRepeat(Animator animation) {
-            
+
         }
     };
-    
+
     public interface ListActionListener {
         public void onListHide();
         public void onListShow();
         public void onListReset();
     }
-    
+
     private ListActionListener mHideListener;
-    
+
     public void setOnListHideListener(ListActionListener listener) {
         mHideListener = listener;
     }
