@@ -8,8 +8,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Orientation;
 
 /**
- * @date   Mar 1, 2013
- * @author Nick Burton (thatsburto.com)
+ * Doesn't do anything to the header view.
  */
 public class RevealingLayout extends LoadingLayout {
     
